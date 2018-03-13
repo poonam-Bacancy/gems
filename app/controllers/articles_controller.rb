@@ -10,6 +10,9 @@ class ArticlesController < ApplicationController
   # GET /articles/1
   # GET /articles/1.json
   def show
+    @article=Article.find(params[:id])
+    @comments = @article.comments.new
+    @comments = @article.comments.all
   end
 
   # GET /articles/new
@@ -61,6 +64,18 @@ class ArticlesController < ApplicationController
     end
   end
 
+  def add_new_comment
+    @article = Article.find(params[:id])
+    comment = @article.comments.build(comment_params)
+    comment.user = User.first
+    if comment.save
+       flash[:notice] = "Comment has been created."
+       redirect_to @article
+    else
+      flash[:alert] = "Comment has not been created."
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_article
@@ -70,5 +85,9 @@ class ArticlesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def article_params
       params.require(:article).permit(:name, :body)
+    end
+
+    def comment_params
+      params.permit(:comment)
     end
 end

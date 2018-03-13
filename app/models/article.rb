@@ -1,3 +1,3 @@
 class Article < ApplicationRecord
-	acts_as_commentable :public, :private
+	acts_as_commentable 
 end
